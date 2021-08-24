@@ -1,4 +1,3 @@
-const { getUser } = require('../Services/Axios/clientService');
 const validation = require('../Utils/validate');
 const Role = require('../Models/RoleSchema');
 const moment = require('moment-timezone');
@@ -49,7 +48,6 @@ const patchRole = async(req, res) => {
 
     /* Remove key:undefined */
     Object.keys(requestObj).forEach(key => requestObj[key] === undefined ? delete requestObj[key] : {});
-
 
     const updateStatus = await Role.findOneAndUpdate({ _id: id }, {
         ...requestObj,
