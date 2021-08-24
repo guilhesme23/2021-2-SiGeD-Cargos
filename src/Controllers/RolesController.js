@@ -19,12 +19,25 @@ const putRole = async(req, res) => {
 };
 
 const getRole = async(req, res) => {
-    const roles = await Role.find();
-    console.log(roles)
+    const { id } = req.params
+    const role = await Role.findOne({ _id: id });
+    return res.status(200).json(role)
+}
+
+const queryRole = async(req, res) => {
+    const { _id, name, description, createdAt, updatedAt } = req.body
+    const requestObj = { _id, name, description, createdAt, updatedAt }
+
+    /* Remove key:undefined */
+    Object.keys(requestObj).forEach(key => requestObj[key] === undefined ? delete requestObj[key] : {});
+
+    console.log(requestObj)
+    const roles = await Role.find(requestObj)
     return res.status(200).json(roles)
 }
 
 module.exports = {
     putRole,
-    getRole
+    getRole,
+    queryRole
 };
