@@ -42,9 +42,26 @@ const deleteRole = async(req, res) => {
     return res.status(200).json({ message: 'success' });
 }
 
+const patchRole = async(req, res) => {
+    const { id } = req.params
+    const { name, description } = req.body
+    const requestObj = { name, description }
+
+    /* Remove key:undefined */
+    Object.keys(requestObj).forEach(key => requestObj[key] === undefined ? delete requestObj[key] : {});
+
+
+    const updateStatus = await Role.findOneAndUpdate({ _id: id }, {
+        ...requestObj,
+        updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+    });
+    return res.status(200).json(updateStatus);
+}
+
 module.exports = {
     putRole,
     getRole,
     queryRole,
-    deleteRole
+    deleteRole,
+    patchRole,
 };
