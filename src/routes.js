@@ -4,6 +4,7 @@ const { verifyJWT } = require('./Utils/functionsJWT');
 const routes = express.Router();
 const RolesController = require('./Controllers/RolesController');
 
-routes.get('/sample', verifyJWT, RolesController.sampleGet);
+routes.post('/role', verifyJWT, RolesController.putRole);
+routes.get('/role', verifyJWT, RolesController.getRole);
 
 module.exports = routes;
