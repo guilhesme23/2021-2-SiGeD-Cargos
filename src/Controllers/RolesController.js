@@ -36,8 +36,15 @@ const queryRole = async(req, res) => {
     return res.status(200).json(roles)
 }
 
+const deleteRole = async(req, res) => {
+    const { id } = req.params
+    await Role.deleteOne({ _id: id });
+    return res.status(200).json({ message: 'success' });
+}
+
 module.exports = {
     putRole,
     getRole,
-    queryRole
+    queryRole,
+    deleteRole
 };
