@@ -4,10 +4,10 @@ const { verifyJWT } = require('./Utils/functionsJWT');
 const routes = express.Router();
 const RolesController = require('./Controllers/RolesController');
 
-routes.post('/role', verifyJWT, RolesController.putRole);
-routes.get('/role/:id', verifyJWT, RolesController.getRole);
-routes.patch('/role/:id', verifyJWT, RolesController.patchRole);
-routes.delete('/role/:id', verifyJWT, RolesController.deleteRole);
-routes.post('/role/query', verifyJWT, RolesController.queryRole);
+routes.post('/role', RolesController.putRole);
+routes.get('/role/:id', RolesController.getRole);
+routes.patch('/role/:id', RolesController.patchRole);
+routes.delete('/role/:id', RolesController.deleteRole);
+routes.post('/role/query', RolesController.queryRole);
 
 module.exports = routes;
