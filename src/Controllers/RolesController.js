@@ -17,6 +17,13 @@ const putRole = async(req, res) => {
     return res.json(newRole);
 };
 
+
+const getAll = async(req, res) => {
+    
+    const role = await Role.find();
+    return res.status(200).json(role)
+}
+
 const getRole = async(req, res) => {
     const { id } = req.params
     const role = await Role.findOne({ _id: id });
@@ -59,6 +66,7 @@ const patchRole = async(req, res) => {
 module.exports = {
     putRole,
     getRole,
+    getAll,
     queryRole,
     deleteRole,
     patchRole,
