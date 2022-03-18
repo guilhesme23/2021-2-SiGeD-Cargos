@@ -19,7 +19,7 @@ A documentação do projeto pode ser acessada pelo nosso site em https://fga-eps
 Todas as funções adicionadas nessa API devem ser testadas, o repositório aceita até 20% do total de linhas não testadas. Para rodar os testes nesse repositório deve ser executado o comando:
 
 ```bash
-docker-compose run api_clients bash -c  "yarn && yarn jest --coverage --forceExit"
+docker-compose run api_roles bash -c  "yarn && yarn jest --coverage --forceExit"
 ```
 
 ## Como rodar?

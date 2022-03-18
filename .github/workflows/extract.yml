@@ -6,7 +6,6 @@ on:
 
 jobs:
   release:
-    if: github.event.pull_request.merged == true
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v2
@@ -14,7 +13,7 @@ jobs:
           fetch-depth: 0
 
       - name: Executar testes
-        run:  docker network create siged_backend && docker-compose run api_demands bash -c  "yarn && yarn jest --coverage --outputFile=test-results.json --json --forceExit"
+        run:  docker network create siged_backend && docker-compose run api_roles bash -c  "yarn && yarn jest --coverage --outputFile=test-results.json --json --forceExit"
 
       - name: Coletar métricas
         run: |
