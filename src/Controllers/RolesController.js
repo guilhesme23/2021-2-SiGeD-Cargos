@@ -63,10 +63,18 @@ const apiRoles = {
     return res.status(200).json(updateStatus);
   },
 
-  async deactivateRole (req, res) {
+  async deactivateRole(req, res) {
     const { id } = req.params;
-    const updateStatus = await Role.findOneAndUpdate({ _id: id }, { active: false });
-    return res.status(200).json(updateStatus);
+
+    try {
+      const updateResponse = await Role.findOneAndUpdate({ _id: id }, {
+        active: false,
+        updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+      }, { new: true }, (feature) => feature);
+      return res.status(200).json(updateResponse);
+    } catch (error) {
+      return res.status(400).json({ message: 'Invalid Id' });
+    }
   }
 };
 
