@@ -1,4 +1,4 @@
-const Cargo = require("../Models/CargoSchema.js");
+const Cargo = require("../Models/RoleSchema.js");
 const db = require("../config/dbConnect.js");
 
 const cargos = [
