@@ -11,6 +11,7 @@ const putRole = async (req, res) => {
   const newRole = await Role.create({
     name,
     description,
+    active: true,
     createdAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
     updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
   });
@@ -18,7 +19,7 @@ const putRole = async (req, res) => {
 };
 
 const getAll = async (req, res) => {
-  const role = await Role.find();
+  const role = await Role.find({ active: true });
   return res.status(200).json(role);
 };
 
@@ -29,17 +30,12 @@ const getRole = async (req, res) => {
 };
 
 const queryRole = async (req, res) => {
-  const {
-    _id, name, description, createdAt, updatedAt,
-  } = req.body;
-  const requestObj = {
-    _id, name, description, createdAt, updatedAt,
-  };
+  const { _id, name, description, createdAt, updatedAt, } = req.body;
+  const requestObj = { _id, name, description, createdAt, updatedAt };
 
   /* Remove key:undefined */
   Object.keys(requestObj).forEach((key) => (requestObj[key] === undefined ? delete requestObj[key] : {}));
 
-  console.log(requestObj);
   const roles = await Role.find(requestObj);
   return res.status(200).json(roles);
 };
@@ -65,6 +61,12 @@ const patchRole = async (req, res) => {
   return res.status(200).json(updateStatus);
 };
 
+const deactivateRole = async (req, res) => {
+  const { id } = req.params;
+  const updateStatus = await Role.findOneAndUpdate({ _id: id }, { active: false });
+  return res.status(200).json(updateStatus);
+}
+
 module.exports = {
   putRole,
   getRole,
@@ -72,4 +74,5 @@ module.exports = {
   queryRole,
   deleteRole,
   patchRole,
+  deactivateRole
 };
