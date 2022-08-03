@@ -33,7 +33,7 @@ const apiRoles = {
 
   async queryRole(req, res) {
     const { _id, name, description, createdAt, updatedAt, } = req.body;
-    const requestObj = { _id, name, description, createdAt, updatedAt };
+    const requestObj = { _id, name, description, active: true, createdAt, updatedAt };
 
     /* Remove key:undefined */
     Object.keys(requestObj).forEach((key) => (requestObj[key] === undefined ? delete requestObj[key] : {}));
