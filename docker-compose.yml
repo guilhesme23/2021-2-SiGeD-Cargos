@@ -6,14 +6,16 @@ services:
     build: .
     ports:
       - 3005:3005
+    environment:
+      PORT: 3005
     env_file: .env
-    volumes: 
+    volumes:
       - ./:/code
       - node_modules:/code/node_modules
     networks:
       - backend_roles
       - siged_backend
-    depends_on: 
+    depends_on:
       - db_roles
 
   db_roles:
@@ -21,20 +23,23 @@ services:
     image: mongo:4.4
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: api_roles
-      MONGO_INITDB_ROOT_PASSWORD: roles_password
-      MONGO_INITDB_DATABASE: api_roles_db
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: root-db-role
+    env_file: .env
     volumes:
-      - ./db/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./db/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+      - ./db/.dbshell:/home/mongodb/.dbshell
       - mongodb:/data/db
-    networks: 
+    networks:
       - backend_roles
 
 volumes:
   node_modules:
   mongodb:
 
+
 networks:
   backend_roles:
   siged_backend:
-      external: false
+    external: true
