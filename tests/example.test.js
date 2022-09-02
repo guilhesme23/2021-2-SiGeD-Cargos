@@ -30,10 +30,12 @@ describe('Sample Test', () => {
     resCargo2 = await request(app).post('/role').set('x-access-token', token).send(cargo2);
     idCargo1 = resCargo1.body._id;
     idCargo2 = resCargo2.body._id;
+   
   });
 
   it('App is defined', () => {
     expect(app).toBeDefined();
+    
   });
 
   it('Post role', async () => {
@@ -41,16 +43,17 @@ describe('Sample Test', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.name).toBe(cargo.name);
     expect(res.body.description).toBe(cargo.description);
-    expect(res.body.active).toBe(true);
     id = res.body._id;
+    
   });
+
 
   it('Get a  role', async () => {
     const res = await request(app).get(`/role/${id}`).set('x-access-token', token);
     expect(res.statusCode).toBe(200);
     expect(res.body.name).toBe(cargo.name);
     expect(res.body.description).toBe(cargo.description);
-    expect(res.body.active).toBe(true);
+    
   });
 
   it('Put a  role', async () => {
@@ -59,7 +62,6 @@ describe('Sample Test', () => {
     expect(res.body).toHaveProperty('_id');
     expect(res.body).toHaveProperty('name');
     expect(res.body).toHaveProperty('description');
-    expect(res.body.active).toBe(true);
   });
 
   it('Find a  role', async () => {
@@ -67,24 +69,16 @@ describe('Sample Test', () => {
       name:"cargo1"
     });
     expect(res.statusCode).toBe(200);
+
+ 
   });
 
-  it('Deactivate a role', async () => {
-    const res = await request(app).patch(`/role/${id}/deactivate`).set('x-access-token', token);
-    expect(res.statusCode).toBe(200);
-    expect(res.body.active).toBe(false);
-  });
-
-  it('Deactivate with invalid id', async () => {
-     const res = await request(app).patch(`/role/invalidId/deactivate`).set('x-access-token', token);
-     expect(res.statusCode).toBe(400);
-     expect(res.body).toEqual({ "message": "Invalid Id" });
-   });
-
-  it('Delete a role', async () => {
+  it('Delete a  role', async () => {
     const res = await request(app).delete(`/role/${id}`).set('x-access-token', token);
     expect(res.statusCode).toBe(200);
+ 
   });
+
 
   afterAll(async ()=>{
    await request(app).delete(`/role/${idCargo1}`).set('x-access-token', token);

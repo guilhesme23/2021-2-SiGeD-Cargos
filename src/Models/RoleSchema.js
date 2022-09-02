@@ -9,11 +9,6 @@ const roleSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
-  active: {
-    type: Boolean,
-    require: true,
-    default: true,
-  },
   createdAt: {
     type: Date,
     require: true,
