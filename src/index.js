@@ -4,7 +4,7 @@ const routes = require('./routes');
 const db = require("./config/dbConnect.js");
 require('dotenv').config();
 
-const { DB_PORT } = process.env;
+const { PORT } = process.env;
 
 db.on("error", console.log.bind(console, 'Error on connecting to MongoDB'));
 db.once("open", () => console.log('MongoDB is connected'));
@@ -14,6 +14,6 @@ app.use(cors());
 app.use(express.json());
 app.use(routes);
 
-app.listen(DB_PORT, () => console.log(`Server running on port ${DB_PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 module.exports = app;
