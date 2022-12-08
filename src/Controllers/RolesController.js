@@ -1,6 +1,6 @@
-const moment = require('moment-timezone');
-const validation = require('../Utils/validate');
-const Role = require('../Models/RoleSchema');
+const moment = require("moment-timezone");
+const validation = require("../Utils/validate");
+const Role = require("../Models/RoleSchema");
 
 const putRole = async (req, res) => {
   const { name, description } = req.body;
@@ -11,33 +11,45 @@ const putRole = async (req, res) => {
   const newRole = await Role.create({
     name,
     description,
-    createdAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-    updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+    active: true,
+    createdAt: moment
+      .utc(moment.tz("America/Sao_Paulo").format("YYYY-MM-DDTHH:mm:ss"))
+      .toDate(),
+    updatedAt: moment
+      .utc(moment.tz("America/Sao_Paulo").format("YYYY-MM-DDTHH:mm:ss"))
+      .toDate(),
   });
   return res.json(newRole);
 };
 
 const getAll = async (req, res) => {
-  const role = await Role.find();
+  const role = await Role.find({
+    active: true
+  });
   return res.status(200).json(role);
 };
 
 const getRole = async (req, res) => {
   const { id } = req.params;
-  const role = await Role.findOne({ _id: id });
+  const role = await Role.findOne({ _id: id, active: true });
   return res.status(200).json(role);
 };
 
 const queryRole = async (req, res) => {
-  const {
-    _id, name, description, createdAt, updatedAt,
-  } = req.body;
+  const { _id, name, description, createdAt, updatedAt } = req.body;
   const requestObj = {
-    _id, name, description, createdAt, updatedAt,
+    _id,
+    name,
+    description,
+    createdAt,
+    updatedAt,
+    active: true,
   };
 
   /* Remove key:undefined */
-  Object.keys(requestObj).forEach((key) => (requestObj[key] === undefined ? delete requestObj[key] : {}));
+  Object.keys(requestObj).forEach((key) =>
+    requestObj[key] === undefined ? delete requestObj[key] : {}
+  );
 
   console.log(requestObj);
   const roles = await Role.find(requestObj);
@@ -46,22 +58,39 @@ const queryRole = async (req, res) => {
 
 const deleteRole = async (req, res) => {
   const { id } = req.params;
-  await Role.deleteOne({ _id: id });
-  return res.status(200).json({ message: 'success' });
+  const updated = await Role.findOneAndUpdate(
+    { _id: id, active: true },
+    {
+      updatedAt: moment
+        .utc(moment.tz("America/Sao_Paulo").format("YYYY-MM-DDTHH:mm:ss"))
+        .toDate(),
+      active: false
+    }
+  );
+
+  console.log(updated)
+  return res.status(200).json({ message: "success" });
 };
 
 const patchRole = async (req, res) => {
   const { id } = req.params;
-  const { name, description } = req.body;
-  const requestObj = { name, description };
+  const { name, description, active } = req.body;
+  const requestObj = { name, description, active };
 
   /* Remove key:undefined */
-  Object.keys(requestObj).forEach((key) => (requestObj[key] === undefined ? delete requestObj[key] : {}));
+  Object.keys(requestObj).forEach((key) =>
+    requestObj[key] === undefined ? delete requestObj[key] : {}
+  );
 
-  const updateStatus = await Role.findOneAndUpdate({ _id: id }, {
-    ...requestObj,
-    updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-  });
+  const updateStatus = await Role.findOneAndUpdate(
+    { _id: id },
+    {
+      ...requestObj,
+      updatedAt: moment
+        .utc(moment.tz("America/Sao_Paulo").format("YYYY-MM-DDTHH:mm:ss"))
+        .toDate(),
+    }
+  );
   return res.status(200).json(updateStatus);
 };
 
