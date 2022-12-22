@@ -1,6 +1,7 @@
 const moment = require("moment-timezone");
 const validation = require("../Utils/validate");
 const Role = require("../Models/RoleSchema");
+const clientsService = require("../Services/clientsService")
 
 const putRole = async (req, res) => {
   const { name, description } = req.body;
@@ -56,19 +57,36 @@ const queryRole = async (req, res) => {
 };
 
 const deleteRole = async (req, res) => {
+  // Get request data
   const { id } = req.params;
-  const updated = await Role.findOneAndUpdate(
-    { _id: id, active: true },
-    {
-      updatedAt: moment
-        .utc(moment.tz("America/Sao_Paulo").format("YYYY-MM-DDTHH:mm:ss"))
-        .toDate(),
-      active: false
-    }
-  );
+  const token = req.headers["x-access-token"];
+  // Find role name
+  const role = await Role.findOne({
+    _id: id
+  })
 
-  console.log(updated)
-  return res.status(200).json({ message: "success" });
+  // Check if exist user with role
+  const clients = await clientsService.getUsersWithRole(role.name, token)
+
+  if (Array.isArray(clients) && clients.length) {
+    return res.status(409).json({
+      message: `Role ${role.name} is being used`
+    })
+
+  } else {
+    const updated = await Role.findOneAndUpdate(
+      { _id: id, active: true },
+      {
+        updatedAt: moment
+          .utc(moment.tz("America/Sao_Paulo").format("YYYY-MM-DDTHH:mm:ss"))
+          .toDate(),
+        active: false,
+      }
+    );
+
+    console.log(updated);
+    return res.status(200).json({ message: "success" });
+  }
 };
 
 const patchRole = async (req, res) => {
