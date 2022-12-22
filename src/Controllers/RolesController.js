@@ -42,8 +42,7 @@ const queryRole = async (req, res) => {
     name,
     description,
     createdAt,
-    updatedAt,
-    active: true,
+    updatedAt
   };
 
   /* Remove key:undefined */
